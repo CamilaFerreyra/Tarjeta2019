@@ -8,9 +8,9 @@ class Boletera implements BoleteraInterface {
 
     protected $colectivo; // la boletera obviamente esta en un unico colectivo
     protected $ingreso;
-    protected $tiempo;
+    public $tiempo;
 
-    public function __construct(ColectivoInterface $colectivo, $tiempo = null)
+    public function __construct(ColectivoInterface $colectivo = null, $tiempo = null)
     {
         $this->colectivo = $colectivo;
         $this->ingreso = 0;
@@ -19,6 +19,7 @@ class Boletera implements BoleteraInterface {
 
     public function sacarBoleto(TarjetaInterface $tarjeta)
     {
+        $tarjeta->informarUso($this->colectivo);
         $tipo = $this->tipoBoleto($tarjeta);
 
         try {
@@ -29,7 +30,6 @@ class Boletera implements BoleteraInterface {
 
         $descontado = $boleto->obtenerValor();
 
-        $tarjeta->informarUso($this->colectivo);
         $pago = $tarjeta->pagar($descontado);
 
         if ($pago == FALSE) {
@@ -78,26 +78,25 @@ class Boletera implements BoleteraInterface {
 
     public function adelantarTiempo($min) {
         if ($this->tiempo->tiempo == null) {
-            $xd = $this->tiempo->tiempo;
-            throw new Exception("Reloj no configurado para modificaciones: $xd");
+            throw new Exception("Reloj no configurado para modificaciones");
         } else {
             $tiempoNuevo = $this->tiempo->tiempo + $min;
         }
 
-        $tiempoViejo = $this->tiempo->tiempo;
+        // $tiempoViejo = $this->tiempo->tiempo;
         // throw new Exception("Tiempo Nuevo: $tiempoNuevo " . "Tiempo Viejo: $tiempoViejo");
 
         $this->tiempo->cambiarTiempo($tiempoNuevo);
     }
 
-    private function esTransbordo(TarjetaInterface $tarjeta) 
+    public function esTransbordo(TarjetaInterface $tarjeta) 
     {
         if ($tarjeta->DevolverUltimoBoleto() == null) {
             return false;
         }
 
         $tiempo_desde_ultimo_viaje = $this->tiempo->tiempo() - $tarjeta->DevolverUltimoBoleto();
-
+        // throw new Exception("$tiempo_desde_ultimo_viaje");
         if ($tarjeta->obtenerUltimoPlus() == FALSE && 
         $tarjeta->ColectivosIguales() == FALSE && 
         $tiempo_desde_ultimo_viaje <= Tiempo::obtenerTiempoTransbordo()) 

@@ -8,7 +8,7 @@ class BoletoTest extends TestCase {
     
     public function testBoletoDenegado() 
     {
-        $colectivo = new Colectivo("133 negra", "semptur", "1234");
+        $colectivo = new Colectivo("133 negra", "semptur", "1234", 1);
         $tarjeta = new Tarjeta("franquicia normal");
         
         // Uso los dos plus

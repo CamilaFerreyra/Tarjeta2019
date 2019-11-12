@@ -105,7 +105,8 @@ class Tarjeta implements TarjetaInterface {
             $this->iguales = FALSE;
         }
         else {
-            if ($colectivo->linea() == $this->devolverUltimoColectivo()->linea()) {
+            // si el ultimo no fue plus y las lineas son identicas
+            if ($this->ultimoplus == FALSE && $colectivo->linea() == $this->devolverUltimoColectivo()->linea()) {
                 $this->iguales = TRUE;
             }
             else {
@@ -134,7 +135,7 @@ class Tarjeta implements TarjetaInterface {
             
         } else if ($this->viajesplus < 2) {
             
-            $this->viajesplus -= 1;
+            $this->viajesplus += 1;
             $this->ultimoplus = TRUE;
             $this->ultimoBoleto = $this->tiempo->tiempo();
 
