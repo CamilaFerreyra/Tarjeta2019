@@ -4,6 +4,8 @@ namespace TrabajoTarjeta;
 
 interface TiempoInterface {
 
-    public static function tiempoTransbordo();
+    public function tiempo();
+    
+    public static function obtenerTiempoTransbordo();
 
 }
