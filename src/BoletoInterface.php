@@ -39,7 +39,7 @@ interface BoletoInterface {
     /**
      * Devuelve el monto de un medio boleto
      */
-    public static function obtenerMontoMedioBoleto();
+    public static function obtenerMedioBoleto();
     /**
      * Devuelve el monto normal
      */
