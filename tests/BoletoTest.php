@@ -6,7 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 class BoletoTest extends TestCase {
     
-    public function boletoDenegado() {
+    public function boletoDenegado() 
+    {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("franquicia normal");
         
@@ -86,6 +87,6 @@ class BoletoTest extends TestCase {
     }
     
     public function circuitoTransbordo() {
-        
+
     }
 }
