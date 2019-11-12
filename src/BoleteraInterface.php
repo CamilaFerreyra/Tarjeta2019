@@ -27,11 +27,13 @@ interface BoleteraInterface {
     private function tipoBoleto($tarjeta); 
 
     /**
-     * Devuelve un numero muy grande, simulando el infinito.
-     *
-     * @return int
+     * Determina si el boleto cumple los requisitos para ser transbordo
+     * Si puede ser transbordo, devuelve TRUE.
+     * 
+     * @param TarjetaInterface $tarjeta
+     * @return bool
      */
-    public function obtenerLimiteTransbordos();
+    private function esTransbordo(TarjetaInterface $tarjeta) 
     
     /**
      * Devuelve el tiempo que tiene una persona para reaslizar el transbordo
