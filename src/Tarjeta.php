@@ -148,7 +148,7 @@ class Tarjeta implements TarjetaInterface {
     }
     
     public function recargar($monto) {
-        $this->saldo = 0;
+        $this->saldo += $monto;
 
         if ($monto == 962.59) {
             $this->saldo += 221.58;
