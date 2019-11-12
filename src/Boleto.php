@@ -31,7 +31,7 @@ class Boleto implements BoletoInterface {
         } else if ($tipo == "denegado") {
             throw new Exception("Boleto denegado");
         } else {
-            throw new Exception("Tipo desconocido");
+            throw new Exception("Tipo desconocido: $tipo");
         }
 
         $this->colectivo   = $boletera->obtenerColectivo();

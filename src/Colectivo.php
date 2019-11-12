@@ -12,11 +12,11 @@ class Colectivo implements ColectivoInterface {
     /**
      * Constructor del colectivo
      */
-    public function __construct($l, $e, $n) {
+    public function __construct($l, $e, $n, $tiempo = null) {
         $this->linea   = $l;
         $this->empresa = $e;
         $this->numero  = $n;
-        $this->boletera = new Boletera($this);
+        $this->boletera = new Boletera($this, $tiempo);
     }
     
     public function linea() {

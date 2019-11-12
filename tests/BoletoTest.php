@@ -16,9 +16,6 @@ class BoletoTest extends TestCase {
         $this->assertFalse($boleto);
     }
 
-    /**
-     *Testeamos que la funcion fecha ande correctamente
-     */
     public function testFranquiciaCompleta() {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("franquicia completa");
@@ -47,11 +44,13 @@ class BoletoTest extends TestCase {
 
     public function testViajePlus()
     {
-        $colectivo = new Colectivo("133 negra", "semptur", "1234");
+        $colectivo = new Colectivo("133 negra", "semptur", "1234", 1);
         $tarjeta = new Tarjeta("franquicia normal");
         
         // Usamos los dos viajes plus
         $colectivo->pagarCon($tarjeta);
+
+        $colectivo = $this->pasarOtroBoleto($colectivo);
         $boleto = $colectivo->pagarCon($tarjeta);
 
         // Comprobamos q se puedan usar dos plus
@@ -63,6 +62,11 @@ class BoletoTest extends TestCase {
 
         // Comprobamos q no se puedan usar mas viajes
         $this->assertFalse($colectivo->pagarCon($tarjeta));
+
+        // Comprobamos q en la recarga se descuenten los viajes plus
+        $tarjeta->recargar(100);
+
+        $this->assertEquals($tarjeta->obtenerSaldo(), 100 - 2 * Boleto::obtenerMontoNormal());
     }
 
     public function testMedioBoleto()
@@ -80,17 +84,29 @@ class BoletoTest extends TestCase {
         // Comprobamos que el boleto se cree bien
         $this->assertEquals("medio boleto", $boleto->obtenerTipo());
         $this->assertEquals(Boleto::obtenerMedioBoleto(), $boleto->obtenerValor());
+    }
 
-        // Usamos los dos viajes plus
-        $colectivo->pagarCon($tarjeta);
-        $boleto = $colectivo->pagarCon($tarjeta);
-
-        $tarjeta->recargar(100);
-
-        $this->assertEquals($tarjeta->obtenerSaldo(), 100 - 2 * Boleto::obtenerMedioBoleto());
+    public function pasarOtroBoleto($colectivo) {
+        $tiempoTransbordo = Tiempo::obtenerTiempoTransbordo() + 5;
+        $colectivo->boletera->adelantarTiempo($tiempoTransbordo);
+        
+        return $colectivo;
     }
     
-    public function circuitoTransbordo() {
+    public function testCircuitoTransbordo() {
+        $colectivo = new Colectivo("133 negra", "semptur", "1234");
+        $tarjeta = new Tarjeta("media franquicia estudiantil");
 
+        // Usamos el plus y "activamos" el transbordo
+        $colectivo->pagarCon($tarjeta);
+
+        $transbordo = $colectivo->pagarCon($tarjeta);
+
+        // Comprobamos que se haya podido pagar correctamente
+        $this->assertNotFalse($transbordo);
+
+        // Comprobamos que el boleto se cree bien
+        $this->assertEquals("transbordo", $transbordo->obtenerTipo());
+        $this->assertEquals(0, $transbordo->obtenerValor());
     }
 }

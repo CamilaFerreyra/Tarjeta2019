@@ -3,6 +3,8 @@
 namespace TrabajoTarjeta;
 
 class Tiempo implements TiempoInterface {
+    public $tiempo;
+    
     public function __construct($tiempo = null) {
         $this->tiempo = $tiempo;
     }
@@ -13,6 +15,10 @@ class Tiempo implements TiempoInterface {
         }
 
         return $this->tiempo;
+    }
+
+    public function cambiarTiempo($tiempo) {
+        $this->tiempo = $tiempo;
     }
 
     public static function obtenerTiempoTransbordo() 

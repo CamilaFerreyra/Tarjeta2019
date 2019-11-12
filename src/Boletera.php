@@ -2,6 +2,8 @@
 
 namespace TrabajoTarjeta;
 
+use Exception;
+
 class Boletera implements BoleteraInterface {
 
     protected $colectivo; // la boletera obviamente esta en un unico colectivo
@@ -22,7 +24,7 @@ class Boletera implements BoleteraInterface {
         try {
             $boleto = new Boleto($this, $tarjeta, $tipo);
         } catch (Exception $e) {
-            return FALSE;
+            throw new Exception($tarjeta->saldoSuficiente());
         }
 
         $descontado = $boleto->obtenerValor();
@@ -66,7 +68,7 @@ class Boletera implements BoleteraInterface {
                 $tipo = "viaje plus";
                 $tarjeta->descontarPlus();
             } else {
-                $tipo = "viaje denegado";
+                $tipo = "denegado";
             }
 
         }
@@ -74,14 +76,33 @@ class Boletera implements BoleteraInterface {
         return $tipo;
     }
 
+    public function adelantarTiempo($min) {
+        if ($this->tiempo->tiempo == null) {
+            $xd = $this->tiempo->tiempo;
+            throw new Exception("Reloj no configurado para modificaciones: $xd");
+        } else {
+            $tiempoNuevo = $this->tiempo->tiempo + $min;
+        }
+
+        $tiempoViejo = $this->tiempo->tiempo;
+        // throw new Exception("Tiempo Nuevo: $tiempoNuevo " . "Tiempo Viejo: $tiempoViejo");
+
+        $this->tiempo->cambiarTiempo($tiempoNuevo);
+    }
+
     private function esTransbordo(TarjetaInterface $tarjeta) 
     {
+        if ($tarjeta->DevolverUltimoBoleto() == null) {
+            return false;
+        }
+
         $tiempo_desde_ultimo_viaje = $this->tiempo->tiempo() - $tarjeta->DevolverUltimoBoleto();
 
         if ($tarjeta->obtenerUltimoPlus() == FALSE && 
-            $tarjeta->ColectivosIguales() == FALSE && 
-            $tiempo_desde_ultimo_viaje <= Tiempo::obtenerTiempoTransbordo()) 
+        $tarjeta->ColectivosIguales() == FALSE && 
+        $tiempo_desde_ultimo_viaje <= Tiempo::obtenerTiempoTransbordo()) 
         {
+            // throw new Exception("Tiempo desde ultimo viaje: $tiempo_desde_ultimo_viaje");
             return TRUE;
         }
         
