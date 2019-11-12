@@ -24,7 +24,7 @@ interface BoleteraInterface {
      * 
      * @return string
      */
-    private function tipoBoleto($tarjeta); 
+    public function tipoBoleto($tarjeta); 
 
     /**
      * Devuelve un numero muy grande, simulando el infinito.
@@ -64,11 +64,4 @@ interface BoleteraInterface {
      *      Devuelve si la operacion se realizo con exito
      */
     public function revision();
-<<<<<<< HEAD
-=======
-
-    public function obtenerColectivo();
-
-    public function obtenerLimiteTransbordos();
->>>>>>> 01ba957d284c873495b13441f9395ec2ace1f9a3
 }

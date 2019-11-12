@@ -11,9 +11,9 @@ class BoletoTest extends TestCase {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("franquicia normal");
         
-        $this->expectException("Boleto denegado");
-        
         $boleto = $colectivo->pagarCon($tarjeta);
+
+        $this->assertFalse($boleto);
     }
 
     /**
