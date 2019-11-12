@@ -16,6 +16,14 @@ interface TarjetaInterface {
     public function recargar($monto);
 
     /**
+     * Devuelve si el saldo actual es suficiente para utilizar un medio boleto
+     * 
+     * @return bool
+     *      Devuelve TRUE si el saldo es mayor o igual al monto de un medio boleto
+     */
+    public function saldoSuficienteMedio();
+
+    /**
      * Devuelve el saldo que le queda a la tarjeta.
      *
      * @return float

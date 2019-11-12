@@ -2,6 +2,8 @@
 
 namespace TrabajoTarjeta;
 
+use Exception;
+
 class Tarjeta implements TarjetaInterface {
     
     /** TODO cambiar el nombre de las variable:
@@ -130,7 +132,8 @@ class Tarjeta implements TarjetaInterface {
             
             return TRUE;
             
-        } else if ($this->viajesplus > 0) {
+        } else if ($this->viajesplus < 2) {
+            
             $this->viajesplus -= 1;
             $this->ultimoplus = TRUE;
             $this->ultimoBoleto = $this->tiempo->tiempo();
@@ -141,6 +144,10 @@ class Tarjeta implements TarjetaInterface {
 
         return FALSE;
         
+    }
+
+    public function saldoSuficienteMedio() {
+        return $this->saldo >= Boleto::obtenerMedioBoleto();
     }
 
     public function obtenerSaldo() {

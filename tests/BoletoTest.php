@@ -11,8 +11,16 @@ class BoletoTest extends TestCase {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("franquicia normal");
         
-        $boleto = $colectivo->pagarCon($tarjeta);
+        // Uso los dos plus
+        $colectivo->pagarCon($tarjeta);
+        
+        $colectivo = $this->pasarOtroBoleto($colectivo);
+        $colectivo->pagarCon($tarjeta);
 
+        // Sacar un nuevo boleto y comprobar q es denegado
+        $colectivo = $this->pasarOtroBoleto($colectivo);
+        $boleto = $colectivo->pagarCon($tarjeta);
+        
         $this->assertFalse($boleto);
     }
 
@@ -38,7 +46,7 @@ class BoletoTest extends TestCase {
         $this->assertNotFalse($boleto);
 
         // Comprobamos que el boleto se cree bien
-        $this->assertEquals("franquicia normal", $boleto->obtenerTipo());
+        $this->assertEquals("normal", $boleto->obtenerTipo());
         $this->assertEquals(Boleto::obtenerMontoNormal(), $boleto->obtenerValor());
     }
 

@@ -24,7 +24,7 @@ class Boletera implements BoleteraInterface {
         try {
             $boleto = new Boleto($this, $tarjeta, $tipo);
         } catch (Exception $e) {
-            throw new Exception($tarjeta->saldoSuficiente());
+            return false;
         }
 
         $descontado = $boleto->obtenerValor();
@@ -48,7 +48,7 @@ class Boletera implements BoleteraInterface {
         if ((
             $tipo_tarjeta == 'media franquicia estudiantil' || 
             $tipo_tarjeta == 'medio boleto universitario'
-            ) && $tarjeta->medios > 0
+            ) && $tarjeta->medios > 0 && $tarjeta->saldoSuficienteMedio()
            )
         {
             if ($tipo_tarjeta == 'medio boleto universitario') {
@@ -63,9 +63,9 @@ class Boletera implements BoleteraInterface {
             if ($this->esTransbordo($tarjeta)) {
                 $tipo = "transbordo";
             } else if ($tarjeta->saldoSuficiente()) {
-                $tipo = "viaje normal";
-            } else if ($tarjeta->CantidadPlus() > 0) {
-                $tipo = "viaje plus";
+                $tipo = "normal";
+            } else if ($tarjeta->CantidadPlus() < 2) {
+                $tipo = "plus";
                 $tarjeta->descontarPlus();
             } else {
                 $tipo = "denegado";
