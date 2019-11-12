@@ -35,6 +35,4 @@ interface BoleteraInterface {
     public function obtenerColectivo();
 
     public function obtenerLimiteTransbordos();
-
-    public function obtenerTiempoTransbordo();
 }
