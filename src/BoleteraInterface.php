@@ -14,7 +14,7 @@ interface BoleteraInterface {
      * @return BoletoInterface|Bool
      *      Devuelve el boleto emitido o False si no se pudo generar un boleto
      */
-    public function sacarBoleto($tarjeta);
+    public function sacarBoleto(TarjetaInterface $tarjeta);
     
     /**
      * Determina si el boleto es normal, plus, media franquicia, franquicia completa
@@ -24,7 +24,7 @@ interface BoleteraInterface {
      * 
      * @return string
      */
-    public function tipoBoleto($tarjeta); 
+    public function tipoBoleto(TarjetaInterface $tarjeta); 
 
     /**
      * Devuelve un numero muy grande, simulando el infinito.
