@@ -24,12 +24,14 @@ class Tarjeta implements TarjetaInterface {
     protected $ultimoColectivo = null;
     protected $iguales = false;
     protected $tiempo;
+    protected $transbordos;
 
     
     public function __construct($tipo_franquicia, $tiempo = null) {
         $this->saldo     = 0.0;
         $this->viajesplus = 0;
         $this->medios     = 2;
+        $this->transbordos = 0;
         $this->ID        = rand(0, 100);
         $this->ultboleto = null;
         $this->tipo_franquicia = $tipo_franquicia;
@@ -42,7 +44,7 @@ class Tarjeta implements TarjetaInterface {
     
     public function obtenerTipo() {
         return $this->tipo_franquicia;
-    }    
+    }
     
     public function DevolverUltimoBoleto() {
         return $this->ultimoBoleto; 

@@ -33,7 +33,7 @@ interface BoleteraInterface {
      * @param TarjetaInterface $tarjeta
      * @return bool
      */
-    private function esTransbordo(TarjetaInterface $tarjeta) 
+    // private function esTransbordo(TarjetaInterface $tarjeta);
     
     /**
      * Devuelve el colectivo al cual pertenece la boletera

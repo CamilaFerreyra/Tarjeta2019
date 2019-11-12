@@ -30,7 +30,7 @@ class BoletoTest extends TestCase {
 
     public function testFranquiciaNormal() {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
-        $tarjeta = new Tarjeta("franquicia completa");
+        $tarjeta = new Tarjeta("franquicia normal");
 
         $tarjeta->recargar(Boleto::obtenerMontoNormal());
 
@@ -48,7 +48,7 @@ class BoletoTest extends TestCase {
     public function testViajePlus()
     {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
-        $tarjeta = new Tarjeta("franquicia completa");
+        $tarjeta = new Tarjeta("franquicia normal");
         
         // Usamos los dos viajes plus
         $colectivo->pagarCon($tarjeta);
@@ -70,10 +70,14 @@ class BoletoTest extends TestCase {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("media franquicia estudiantil");
 
-        $tarjeta->recargar(15);
+        $tarjeta->recargar(Boleto::obtenerMedioBoleto());
 
         $boleto = $colectivo->pagarCon($tarjeta);
 
+        // Comprobamos que se haya podido pagar correctamente el viaje
+        $this->assertNotFalse($boleto);
+
+        // Comprobamos que el boleto se cree bien
         $this->assertEquals("medio boleto", $boleto->obtenerTipo());
         $this->assertEquals(Boleto::obtenerMedioBoleto(), $boleto->obtenerValor());
 

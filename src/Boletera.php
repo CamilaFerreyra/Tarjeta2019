@@ -34,10 +34,9 @@ class Boletera implements BoleteraInterface {
             return FALSE;
         }
 
-        $tarjeta->guardarUltimoBoleto($boleto);
         $this->ingreso += $descontado;
 
-        return TRUE;
+        return $boleto;
     }
 
     public function tipoBoleto(TarjetaInterface $tarjeta) 
@@ -77,11 +76,10 @@ class Boletera implements BoleteraInterface {
 
     private function esTransbordo(TarjetaInterface $tarjeta) 
     {
-        $tiempo_desde_ultimo_viaje = $this->tiempo->tiempo() - $tarjeta->DevolverUltimoTiempo();     
+        $tiempo_desde_ultimo_viaje = $this->tiempo->tiempo() - $tarjeta->DevolverUltimoBoleto();
 
         if ($tarjeta->obtenerUltimoPlus() == FALSE && 
             $tarjeta->ColectivosIguales() == FALSE && 
-            $this->obtenerLimiteTransbordos() > $tarjeta->obtenerNroTransbordos() &&
             $tiempo_desde_ultimo_viaje <= Tiempo::obtenerTiempoTransbordo()) 
         {
             return TRUE;

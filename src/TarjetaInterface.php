@@ -21,8 +21,8 @@ interface TarjetaInterface {
      * @return float
      *      el saldo de la saldo
      */
-    public function obtenerSaldo(); 
-
+    public function obtenerSaldo();
+    
 
     /**
      * Devuelve el ultimo boleto que se saco con la tarjeta
