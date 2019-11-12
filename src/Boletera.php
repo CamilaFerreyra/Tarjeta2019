@@ -40,7 +40,7 @@ class Boletera implements BoleteraInterface {
         return TRUE;
     }
 
-    private function tipoBoleto(TarjetaInterface $tarjeta) 
+    public function tipoBoleto(TarjetaInterface $tarjeta) 
     {
         $tipo_tarjeta = $tarjeta->obtenerTipo();
 
