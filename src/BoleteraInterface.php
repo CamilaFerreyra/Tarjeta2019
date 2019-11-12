@@ -34,16 +34,6 @@ interface BoleteraInterface {
     public function obtenerLimiteTransbordos();
     
     /**
-     * Devuelve el tiempo que tiene una persona para reaslizar el transbordo
-     * si es día de semana, devuelve una hora, sino dos horas.
-     * 
-     * @return int ColectivoInterface $colectivo
-     * 
-     */
-
-    public function obtenerTiempoTransbordo();
-   
-    /**
      * Devuelve el colectivo al cual pertenece la boletera
      *
      */
