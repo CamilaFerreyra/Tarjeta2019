@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class BoletoTest extends TestCase {
     
-    public function boletoDenegado() 
+    public function testBoletoDenegado() 
     {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("franquicia normal");
@@ -19,7 +19,7 @@ class BoletoTest extends TestCase {
     /**
      *Testeamos que la funcion fecha ande correctamente
      */
-    public function franquiciaCompleta() {
+    public function testFranquiciaCompleta() {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("franquicia completa");
 
@@ -28,7 +28,7 @@ class BoletoTest extends TestCase {
         $this->assertEquals(0, $boleto->obtenerValor());
     }
 
-    public function franquiciaNormal() {
+    public function testFranquiciaNormal() {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("franquicia completa");
 
@@ -45,7 +45,7 @@ class BoletoTest extends TestCase {
         $this->assertEquals(Boleto::obtenerMontoNormal(), $boleto->obtenerValor());
     }
 
-    public function circuitoViajePlus()
+    public function testViajePlus()
     {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("franquicia completa");
@@ -65,7 +65,7 @@ class BoletoTest extends TestCase {
         $this->assertFalse($colectivo->pagarCon($tarjeta));
     }
 
-    public function circuitoMedioBoleto()
+    public function testMedioBoleto()
     {
         $colectivo = new Colectivo("133 negra", "semptur", "1234");
         $tarjeta = new Tarjeta("media franquicia estudiantil");
