@@ -84,7 +84,7 @@ class Boletera implements BoleteraInterface {
         return FALSE;
     }
 
-    private function obtenerLimiteTransbordos()
+    public function obtenerLimiteTransbordos()
     {
         return 5000; // virtualmente infinito
     }
