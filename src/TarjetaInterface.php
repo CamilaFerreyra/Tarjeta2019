@@ -102,7 +102,7 @@ interface TarjetaInterface {
     /**
      * Resta el saldo a nuestra tarjeta despues de pagar un viaje
      */
-    public function restarSaldo();
+    public function restarSaldo($monto);
 
     /**
      * Devuelve la ID de nuestra tarjeta
