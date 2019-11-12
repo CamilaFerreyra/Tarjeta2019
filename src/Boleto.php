@@ -2,8 +2,10 @@
 
 namespace TrabajoTarjeta;
 
+use Exception;
+
 class Boleto implements BoletoInterface {
-    
+
     protected $valor;
     protected $colectivo;
     protected $fecha;
@@ -11,34 +13,32 @@ class Boleto implements BoletoInterface {
     protected $saldo;
     protected $id;
     protected $tipo;
-    protected $descripcion;
     protected $timeult;
     
-    public function __construct($valor, $colectivo, $tarjeta, $tipo, $descripcion) {
-        if($tarjeta->devolverUltimoTransbordo()) {
-          $this->valor = $tarjeta->devolverMontoTransbordo();
+    public function __construct($boletera, $tarjeta, $tipo) { 
+        if($tipo == "transbordo") {
+            $this->valor = Boleto::obtenerMontoTransbordo();
+        } else if ($tipo == "medio boleto") {
+            $this->valor = Boleto::obtenerMedioBoleto();
+        } else if ($tipo == "normal") {
+            $this->valor = Boleto::obtenerMontoNormal();
+        } else if ($tipo == 'franquicia completa') {
+            $this->valor = Boleto::obtenerMontoFranquicia();
+        } else if ($tipo == "plus") {
+            $this->valor = 0.0; 
+        } else if ($tipo == "transbordo") {
+            $this->valor = 0;
+        } else if ($tipo == "denegado") {
+            throw new Exception("Boleto denegado");
+        } else {
+            throw new Exception("Tipo desconocido");
         }
-        else {
-          $this->valor = $tarjeta->devolverUltimoPago();
-        }
-        $this->colectivo   = $colectivo->linea();
+
+        $this->colectivo   = $boletera->obtenerColectivo();
         $this->saldo       = $tarjeta->obtenerSaldo();
         $this->id          = $tarjeta->obtenerID();
-        $this->fecha       = date('d-m-Y', $tarjeta->DevolverUltimoTiempo());
-        $this->descripcion = $descripcion;
-        if ($tarjeta->usoplus() == TRUE) {
-            $this->tipo = "VIAJE PLUS";
-        }
-        else {
-            if ($tarjeta->devolverUltimoTransbordo()) {
-                $this->tipo = "TRANSBORDO";
-            }
-            else {
-                $this->tipo = $tarjeta->tipotarjeta();
-            }
-        }
-        
-        
+        $this->fecha       = date('d-m-Y', time());
+        $this->tipo        = $tipo;
     }
     
     /**
@@ -46,7 +46,6 @@ class Boleto implements BoletoInterface {
      *
      * @return int
      */
-    
     public function obtenerValor() {
         return $this->valor;
     }
@@ -63,11 +62,30 @@ class Boleto implements BoletoInterface {
     
     public function obtenerColectivo() {
         return $this->colectivo;
-        
     }
     
     public function obtenerFecha() {
         return $this->fecha;
+    }
+
+    public static function obtenerMontoTransbordo() 
+    {
+        return 0.0;
+    }
+
+    public static function obtenerMontoNormal()
+    {
+        return 30.0;
+    }
+    
+    public static function obtenerMedioBoleto()
+    {
+        return 15.0;
+    }
+
+    public static function obtenerMontoFranquicia()
+    {
+        return 0.0;
     }
     
 }

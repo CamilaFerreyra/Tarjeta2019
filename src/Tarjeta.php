@@ -4,209 +4,100 @@ namespace TrabajoTarjeta;
 
 class Tarjeta implements TarjetaInterface {
     
-    protected $saldo = 0;
-    public $monto = 14.8;
-    protected $viajeplus = 0;
+    /** TODO cambiar el nombre de las variable:
+     *  - iguales: usado para el transbordo y saber cuando se tomo la misma linea
+     */ 
+    protected $saldo;
+    protected $viajesplus;
     protected $ID;
     protected $ultboleto = null;
-    protected $tipo = 'franquicia normal';
-    protected $tiempo;
+    protected $tipo;
     protected $ultimoplus = false;
-    protected $fechault;
-    protected $pago = 0;
-    protected $plusdevuelto = 0;
+    protected $ultimoPago = 0; // TODO eliminar esto
     public $universitario = false;
-    protected $ultimoTiempo = null;
+    protected $ultimoBoleto = null;
     protected $montoTransbordo;
     protected $tiempoTr;
-    protected $ultimoTransbordo = false;
+    public $medios;
+    
     protected $colec;
     protected $ultimoColectivo = null;
     protected $iguales = false;
+    protected $tiempo;
+
     
-    
-    public function __construct(TiempoInterface $tiempo) {
+    public function __construct($tipo_franquicia, $tiempo = null) {
         $this->saldo     = 0.0;
-        $this->viajeplus = 0;
+        $this->viajesplus = 0;
+        $this->medios     = 2;
         $this->ID        = rand(0, 100);
         $this->ultboleto = null;
-        $this->tiempo    = $tiempo;
+        $this->tipo_franquicia = $tipo_franquicia;
+        $this->tiempo    = new Tiempo($tiempo);
+    }
+
+    public function contarMedio() {
+        $this->medios -= 1;
     }
     
+    public function obtenerTipo() {
+        return $this->tipo_franquicia;
+    }    
     
-    public function getTiempo() {
-        return $this->tiempo->reciente();
-    }
-    
-    public function MostrarPlusDevueltos() {
-        
-        return $this->plusdevuelto; 
-    }
-    
-    public function DevolverUltimoTiempo() {
-        
-        return $this->ultimoTiempo;
-    }
-    
-    public function reiniciarPlusDevueltos() {
-        
-        $this->plusdevuelto = 0;
-    }
-    
-    public function usoplus() {
-        
-        return $this->ultimoplus; 
-    }
-    
-    public function ultimopago() {
-        if ($this->devolverUltimoTransbordo()) {
-          $this->pago = ($this->monto * 0.33);
-        }
-            
-       
-        else {
-          $this->pago = $this->monto + 14.8*$this->MostrarPlusDevueltos();
-        }
-            
-        
+    public function DevolverUltimoBoleto() {
+        return $this->ultimoBoleto; 
     }
     
     public function devolverUltimoPago() {
-        
-        return $this->pago;
+        return $this->ultimoPago;
     } 
     
-    public function tipotarjeta() 
-    {
-        
-        if ($this->monto == 14.8) {
-            return $this->tipo;
-        }
-        else {
-            if ($this->monto == 7.4) {
-                
-                if ($this->universitario == TRUE) {
-                    $this->tipo = 'medio universitario';
-                    return $this->tipo;
-                }
-                $this->tipo = 'media franquicia estudiantil';
-                return $this->tipo;
-            }
-            $this->tipo = 'franquicia completa';
-            return $this->tipo;
-        }
-        
-    }
-    
     public function CantidadPlus() {
-        return $this->viajeplus; //devuelve la cantidad de viajes plus que adeudamos
-        
+        return $this->viajesplus; 
     }
     
-    
-    public function IncrementoPlus() {
-        
-        $this->viajeplus += 1;
+    public function descontarPlus() { 
+        if ($this->viajesplus >= 2) {
+            return false;
+        }
+
+        $this->viajesplus += 1;
+        return true;
     }
-    
-    public function RestarPlus() {
-        
-        $this->viajeplus = 0;
+
+    public function reiniciarPlus() {
+        $this->viajesplus = 0;
     }
     
     
     public function saldoSuficiente() {
-        if ($this->obtenerSaldo() >= ($this->monto + $this->CantidadPlus() * 14.8)) {
+        if ($this->saldo >= Boleto::obtenerMontoNormal()) {
             return TRUE;
         }
-        return FALSE;
-        
-    } //indica si tenemos saldo suficiente para pagar un viaje
-    
-    public function obtenerSaldo() {
-        return $this->saldo;
-    }
-    
-    public function devolverUltimoTransbordo() {
-        
-        return $this->ultimoTransbordo;
-    }
-    public function devolverMontoTransbordo() {
-        $this->montoTransbordo = ($this->monto*0.33);
-        return $this->montoTransbordo;
-    }
-    
-    public function tiempoTransbordo() {
-        if ($this->tiempo->esDiaSemana() && $this->tiempo->esFeriado() == FALSE) {
-            $tiempoTr = 60 * 60;
-            return $tiempoTr;
-        }
-        
-        $tiempoTr = 90 * 60;
-        return $tiempoTr;
-    }
-    
-    public function esTransbordo() {
-        
-        if ($this->usoplus() == FALSE && $this->ColectivosIguales() == FALSE && $this->devolverUltimoTransbordo() == FALSE) {
-            
-            
-            if ($this->tiempo->reciente() - $this->DevolverUltimoTiempo() < $this->tiempoTransbordo()) {
-                
-                return TRUE;
-            }
-        }
-        
-        return FALSE;
+
+        return FALSE;  
     } 
     
-    public function restarSaldo() {
-        if ($this->DevolverUltimoTiempo() == NULL) {
-            
-            
-            $this->saldo -= $this->monto;
-            $this->viajeplus        = 0;
-            $this->ultimoTransbordo = FALSE;
-        }
-        else {
-            
-            if ($this->esTransbordo()) {
-                
-                
-                $this->montoTransbordo = ($this->monto * 0.33);
-                $this->saldo -= $this->montoTransbordo;
-                $this->ultimoTransbordo = TRUE;
-            }
-            else {
-                
-                $this->saldo -= ($this->monto + $this->CantidadPlus() * 14.8);
-                $this->viajeplus        = 0;
-                $this->ultimoTransbordo = FALSE;
-            }
-            
-        }
+    public function restarSaldo($monto) {
+        $this->saldo -= $monto;
     }
-    
+
     public function obtenerID() {
         return $this->ID;
-    }
-    
-    public function guardarUltimoBoleto($boleto) {
-        $this->ultboleto = $boleto;
     }
     
     public function devolverUltimoColectivo() {
         return $this->ultimoColectivo;
     }
     
-    public function ColectivosIguales() {
+    public function ColectivosIguales() { 
         return $this->iguales;
     }
     
-    
-    public function pagar(Colectivo $colectivo) {
-        
-        if ($this->DevolverUltimoTiempo() == NULL) {
+
+    public function informarUso(ColectivoInterface $colectivo) 
+    {
+        if ($this->ultimoBoleto == NULL) {
             $this->iguales = FALSE;
         }
         else {
@@ -217,69 +108,65 @@ class Tarjeta implements TarjetaInterface {
                 $this->iguales = FALSE;
             }
         }
-        
-        if ($this->saldoSuficiente()) {
+
+        $this->ultimoColectivo = $colectivo;
+    }
+
+    public function obtenerUltimoPlus()
+    {
+        return $this->ultimoplus;
+    }
+    
+    public function pagar($valor) {
+                
+        if ($this->saldo >= $valor) {
+
+            $this->restarSaldo($valor);
+            $this->ultimoPago      = $valor;
+            $this->ultimoplus      = FALSE;
+            $this->ultimoBoleto    = $this->tiempo->tiempo();
             
-            if ($this->usoplus() == FALSE) {
-                $this->restarSaldo();
-                $this->ultimopago();
-                $this->plusdevuelto    = 0;
-                $this->ultimoplus      = FALSE;
-                $this->ultimoTiempo    = $this->tiempo->reciente();
-                $this->ultimoColectivo = $colectivo;
-            }
-            else {
-                $this->plusdevuelto = $this->CantidadPlus();
-                $this->restarSaldo();
-                $this->ultimopago();
-                $this->RestarPlus();
-                $this->ultimoplus      = false;
-                $this->ultimoTiempo    = $this->tiempo->reciente();
-                $this->ultimoColectivo = $colectivo;
-            }
+            return TRUE;
             
-            return true;
-            
+        } else if ($this->viajesplus > 0) {
+            $this->viajesplus -= 1;
+            $this->ultimoplus = TRUE;
+            $this->ultimoBoleto = $this->tiempo->tiempo();
+
+            return TRUE;
+
         }
-        else {
-            
-            if ($this->CantidadPlus() < 2) {
-                $this->plusdevuelto = 0;
-                $this->ultimoplus   = true;
-                $this->IncrementoPlus();
-                $this->ultimoTiempo    = $this->tiempo->reciente();
-                $this->ultimoColectivo = $colectivo;
-                return true;
-            }
-            return false;
-            
-        }
+
+        return FALSE;
         
+    }
+
+    public function obtenerSaldo() {
+        return $this->saldo;
     }
     
     public function recargar($monto) {
+        $this->saldo = 0;
+
+        if ($monto == 962.59) {
+            $this->saldo += 221.58;
+        } else if ($monto == 510.15) {
+            $this->saldo += 81.93;
+        }
+
+        if ($this->viajesplus > 0) {
+            $montoViajesPlus = Boleto::obtenerMontoNormal() * $this->viajesplus;
+            
+            if ($this->saldo < $montoViajesPlus) {
+                return FALSE;
+            } else {
+                $this->saldo -= $montoViajesPlus; 
+            }
+
+            $this->reiniciarPlus();
+        } 
         
-        if ($monto == 10 || $monto == 20 || $monto == 30 || $monto == 50 || $monto == 100 || $monto == 510.15 || $monto == 962.59) {
-            if ($monto == 962.59) {
-                $this->saldo += ($monto + 221.58);
-                return true;
-            }
-            else {
-                if ($monto == 510.15) {
-                    $this->saldo += ($monto + 81.93);
-                    return true;
-                }
-                else {
-                    $this->saldo += $monto;
-                    return true;
-                }
-            }
-            
-        }
-        else {
-            return false;
-            
-        }
+        return TRUE;
         
     }
     

@@ -23,36 +23,15 @@ interface TarjetaInterface {
      */
     public function obtenerSaldo(); 
 
-    /**
-     * Devuelve el tiempo actual en base al tiempo inyectado a la tarjeta
-     * @return int
-     *      tiempo 
-     */
-    public function getTiempo(); 
 
     /**
-     *
-     * @return int 
-     *      la cantidad de viajes plus que se DEVOLVIERON el ultimo viaje.
-     *      
-     */
-    public function MostrarPlusDevueltos();  
-
-
-    /**
-     * Reinicia la variable que almacena la cantidad de plus que se devolvieron a 0.
-     * Esta funcion no retorna nada
-     */
-    public function reiniciarPlusDevueltos();
-
-    /**
-     * Devuelve el tiempo en que se realizó el ultimo viaje
+     * Devuelve el ultimo boleto que se saco con la tarjeta
      * En caso de que sea el primer viaje de la tarjeta esta funcion retorna NULL
      * 
      * @return int 
-     *       El tiempo en el que se realizó el ultimo viaje.
+     *       El tiempo del ultimo boleto que se saco con la tarjeta
      */
-    public function DevolverUltimoTiempo(); 
+    public function DevolverUltimoBoleto(); 
 
     /**
      * Devuelve TRUE si el ultimo viaje realizo fue plus. Devuelve FALSE en caso contrario
@@ -60,13 +39,7 @@ interface TarjetaInterface {
      * @return bool
      *          $Ultimoplus
      */
-    public function usoplus();
-
-    /**
-     * Guarda en la variable pago la cantidad de dinero que gastamos en el ultimo viaje.
-     * Esta funcion solo procesa. No retorna nada
-     */
-    public function ultimopago();
+    public function obtenerUltimoPlus();
 
     /**
      * Retorna la cantidad de dinero que usamos el ultimo viaje, que se encuentra almacenada 
@@ -85,7 +58,7 @@ interface TarjetaInterface {
      *  @return string
      *              El tipo de tarjeta
      */ 
-    public function tipotarjeta();
+    public function obtenerTipo();
 
     /**
      * Almacena la cantidad de viajes plus que DEBEMOS
@@ -95,14 +68,18 @@ interface TarjetaInterface {
      */
     public function CantidadPlus();
 
-    /**Incrementa en 1 la cantidad de plus que debemos. Esta funcion no retorna nada */
-    public function IncrementoPlus();
+    /**
+     * Incrementa en 1 la cantidad de plus que debemos. Esta funcion no retorna nada 
+     * 
+     * @return bool
+     *      Retorna si se pueden o no descontar plus
+     */
+    public function descontarPlus();
 
     /**
-     * Hace que la cantidad de plus que debemos pase a ser 0.
-     * Esta funcion solo procesa.
+     * Reinicia la cantidad de viajes plus usados a 0
      */
-    public function RestarPlus();
+    public function reiniciarPlus();
 
     /**
      * Retorna TRUE en caso de que tengamos el saldo suficiente para pagar un viaje.
@@ -113,39 +90,14 @@ interface TarjetaInterface {
      */
     public function saldoSuficiente();
 
-
     /**
-     * Retorna TRUE en caso de que el ultimo viaje haya sido transbordo
-     * Retorna FALSE en caso contrario.
-     * @return bool
-     *      
-     */
-    public function devolverUltimoTransbordo();
-
-    /**
-     * Devuelve el monto que vale el transbordo.
-     * @return float
-     *              el monto del transbordo
-     */
-    public function devolverMontoTransbordo();
-
-    /**
-     * Devuelve el tiempo maximo que tenemos para realizar un transbordo en base a la fecha y el horario en el 
-     * que nos encontremos
+     * Funcion necesaria para configurar en que colectivo nos encontramos actualmente que
+     * cualquier implementacion de boletera deberia usar antes de informar un pago
      * 
-     * @return int
-     *              tiempo que tenemos para hacer transbordo
-     *    
+     * @param ColectivoInterface colectivo
+     *      El colectivo en el que se encuentra el usuario
      */
-    public function tiempoTransbordo();
-
-    /**
-     * Devuelve TRUE si el viaje que vamos a pagar debe ser transbordo. 
-     * Devuelve FALSO en caso contrario
-     * 
-     * @return bool
-     */
-    public function esTransbordo();
+    public function informarUso(ColectivoInterface $colectivo);
 
     /**
      * Resta el saldo a nuestra tarjeta despues de pagar un viaje
@@ -158,11 +110,6 @@ interface TarjetaInterface {
      *             ID de la tarjeta
      * */
     public function obtenerID();
-
-    /**
-     * Guarda el ultimo boleto que nos devolvieron al pagar
-     */
-    public function guardarUltimoBoleto($boleto);
 
     /**
      * Devuelve el ultimo colectivo que hayamos viajado
@@ -181,10 +128,15 @@ interface TarjetaInterface {
     public function ColectivosIguales();
 
     /**
+     * Descuenta un medio boleto de la tarjeta
+     */
+    public function contarMedio();
+
+    /**
      * Devuelve TRUE y realiza las acciones correspondientes en caso de que podamos pagar un viaje
      * FALSE en caso contario
      * @return bool
      */
-    public function pagar(Colectivo $colectivo);
+    public function pagar($valor);
 
 }
