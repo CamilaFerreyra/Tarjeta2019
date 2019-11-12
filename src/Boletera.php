@@ -15,7 +15,7 @@ class Boletera implements BoleteraInterface {
         $this->tiempo = new Tiempo($tiempo);
     }
 
-    public function sacarBoleto($tarjeta)
+    public function sacarBoleto(TarjetaInterface $tarjeta)
     {
         $tipo = $this->tipoBoleto($tarjeta);
         $boleto = new Boleto($this, $tarjeta, $tipo);
@@ -34,7 +34,7 @@ class Boletera implements BoleteraInterface {
         return TRUE;
     }
 
-    private function tipoBoleto($tarjeta) 
+    private function tipoBoleto(TarjetaInterface $tarjeta) 
     {
         $tipo_tarjeta = $tarjeta->obtenerTipo();
 
@@ -69,7 +69,7 @@ class Boletera implements BoleteraInterface {
         return $tipo;
     }
 
-    private function esTransbordo($tarjeta) 
+    private function esTransbordo(TarjetaInterface $tarjeta) 
     {
         $tiempo_desde_ultimo_viaje = $this->tiempo->tiempo() - $tarjeta->DevolverUltimoTiempo();     
 

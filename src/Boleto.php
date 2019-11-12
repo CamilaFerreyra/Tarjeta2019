@@ -15,7 +15,7 @@ class Boleto implements BoletoInterface {
     protected $tipo;
     protected $timeult;
     
-    public function __construct($boletera, $tarjeta, $tipo) { 
+    public function __construct(BoleteraInterface $boletera, TarjetaInterface $tarjeta, $tipo) { 
         if($tipo == "transbordo") {
             $this->valor = Boleto::obtenerMontoTransbordo();
         } else if ($tipo == "medio boleto") {
