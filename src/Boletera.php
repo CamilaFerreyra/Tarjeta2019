@@ -18,7 +18,13 @@ class Boletera implements BoleteraInterface {
     public function sacarBoleto(TarjetaInterface $tarjeta)
     {
         $tipo = $this->tipoBoleto($tarjeta);
-        $boleto = new Boleto($this, $tarjeta, $tipo);
+
+        try {
+            $boleto = new Boleto($this, $tarjeta, $tipo);
+        } catch (Exception $e) {
+            return FALSE;
+        }
+
         $descontado = $boleto->obtenerValor();
 
         $tarjeta->informarUso($this->colectivo);
@@ -34,7 +40,7 @@ class Boletera implements BoleteraInterface {
         return TRUE;
     }
 
-    private function tipoBoleto(TarjetaInterface $tarjeta) 
+    public function tipoBoleto(TarjetaInterface $tarjeta) 
     {
         $tipo_tarjeta = $tarjeta->obtenerTipo();
 
