@@ -25,6 +25,7 @@ class Boletera implements BoleteraInterface {
         try {
             $boleto = new Boleto($this, $tarjeta, $tipo);
         } catch (Exception $e) {
+            // throw $e;
             return false;
         }
 
@@ -45,10 +46,12 @@ class Boletera implements BoleteraInterface {
     {
         $tipo_tarjeta = $tarjeta->obtenerTipo();
 
-        if ((
+        if ($this->esTransbordo($tarjeta)) {
+            $tipo = "transbordo";
+        } else if ((
             $tipo_tarjeta == 'media franquicia estudiantil' || 
             $tipo_tarjeta == 'medio boleto universitario'
-            ) && $tarjeta->medios > 0 && $tarjeta->saldoSuficienteMedio()
+            ) && $tarjeta->obtenerMedios() > 0 && $tarjeta->saldoSuficienteMedio()
            )
         {
             if ($tipo_tarjeta == 'medio boleto universitario') {
@@ -60,13 +63,10 @@ class Boletera implements BoleteraInterface {
             $tipo = "franquicia completa";
         } else {
 
-            if ($this->esTransbordo($tarjeta)) {
-                $tipo = "transbordo";
-            } else if ($tarjeta->saldoSuficiente()) {
+            if ($tarjeta->saldoSuficiente()) {
                 $tipo = "normal";
             } else if ($tarjeta->CantidadPlus() < 2) {
                 $tipo = "plus";
-                $tarjeta->descontarPlus();
             } else {
                 $tipo = "denegado";
             }
@@ -82,9 +82,6 @@ class Boletera implements BoleteraInterface {
         } else {
             $tiempoNuevo = $this->tiempo->tiempo + $min;
         }
-
-        // $tiempoViejo = $this->tiempo->tiempo;
-        // throw new Exception("Tiempo Nuevo: $tiempoNuevo " . "Tiempo Viejo: $tiempoViejo");
 
         $this->tiempo->cambiarTiempo($tiempoNuevo);
     }

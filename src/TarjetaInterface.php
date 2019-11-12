@@ -15,6 +15,15 @@ interface TarjetaInterface {
      */
     public function recargar($monto);
 
+
+    /**
+     * Devuelve la cantidad de medios boletos que tiene la tarjeta
+     * 
+     * @return int
+     *      Cantidad de medios
+     */
+    public function obtenerMedios();
+    
     /**
      * Devuelve si el saldo actual es suficiente para utilizar un medio boleto
      * 

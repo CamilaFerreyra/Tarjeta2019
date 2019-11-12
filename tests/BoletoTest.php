@@ -3,6 +3,7 @@
 namespace TrabajoTarjeta;
 
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 class BoletoTest extends TestCase {
     
@@ -66,7 +67,7 @@ class BoletoTest extends TestCase {
 
         // Comprobamos que el boleto se cree bien
         $this->assertEquals("plus", $boleto->obtenerTipo());
-        $this->assertEquals(0, $boleto->obtenerValor());
+        $this->assertEquals(Boleto::obtenerMontoNormal(), $boleto->obtenerValor());
 
         // Comprobamos q no se puedan usar mas viajes
         $this->assertFalse($colectivo->pagarCon($tarjeta));
@@ -102,14 +103,18 @@ class BoletoTest extends TestCase {
     }
     
     public function testCircuitoTransbordo() {
-        $colectivo = new Colectivo("133 negra", "semptur", "1234");
+        $colectivo1 = new Colectivo("133 negra", "semptur", "1234");
+        $colectivo2 = new Colectivo("a", "b", "c");
         $tarjeta = new Tarjeta("media franquicia estudiantil");
 
+        $tarjeta->recargar(100);
+
         // Usamos el plus y "activamos" el transbordo
-        $colectivo->pagarCon($tarjeta);
+        $colectivo1->pagarCon($tarjeta);
 
-        $transbordo = $colectivo->pagarCon($tarjeta);
+        $transbordo = $colectivo2->pagarCon($tarjeta);
 
+        // $this->assertTrue($tarjeta->CantidadPlus() < 2);
         // Comprobamos que se haya podido pagar correctamente
         $this->assertNotFalse($transbordo);
 

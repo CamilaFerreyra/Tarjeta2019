@@ -20,7 +20,7 @@ class Tarjeta implements TarjetaInterface {
     protected $ultimoBoleto = null;
     protected $montoTransbordo;
     protected $tiempoTr;
-    public $medios;
+    protected $medios;
     
     protected $colec;
     protected $ultimoColectivo = null;
@@ -28,7 +28,7 @@ class Tarjeta implements TarjetaInterface {
     protected $tiempo;
     protected $transbordos;
 
-    
+
     public function __construct($tipo_franquicia, $tiempo = null) {
         $this->saldo     = 0.0;
         $this->viajesplus = 0;
@@ -38,6 +38,10 @@ class Tarjeta implements TarjetaInterface {
         $this->ultboleto = null;
         $this->tipo_franquicia = $tipo_franquicia;
         $this->tiempo    = new Tiempo($tiempo);
+    }
+
+    public function obtenerMedios() {
+        return $this->medios;
     }
 
     public function contarMedio() {
