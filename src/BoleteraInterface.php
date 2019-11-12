@@ -15,7 +15,40 @@ interface BoleteraInterface {
      *      Devuelve el boleto emitido o False si no se pudo generar un boleto
      */
     public function sacarBoleto($tarjeta);
+    
+    /**
+     * Determina si el boleto es normal, plus, media franquicia, franquicia completa
+     * o denengado
+     * 
+     * @param TarjetaInterface $tarjeta
+     * 
+     * @return string
+     */
+    private function tipoBoleto($tarjeta); 
 
+    /**
+     * Devuelve un numero muy grande, simulando el infinito.
+     *
+     * @return int
+     */
+    public function obtenerLimiteTransbordos();
+    
+    /**
+     * Devuelve el tiempo que tiene una persona para reaslizar el transbordo
+     * si es día de semana, devuelve una hora, sino dos horas.
+     * 
+     * @return int ColectivoInterface $colectivo
+     * 
+     */
+
+    public function obtenerTiempoTransbordo();
+   
+    /**
+     * Devuelve el colectivo al cual pertenece la boletera
+     *
+     */
+    public function obtenerColectivo();
+    
     /**
      * Devuelve la cantidad de dinero q fue descontada desde la ultima
      * revision
@@ -31,10 +64,4 @@ interface BoleteraInterface {
      *      Devuelve si la operacion se realizo con exito
      */
     public function revision();
-
-    public function obtenerColectivo();
-
-    public function obtenerLimiteTransbordos();
-
-    public function obtenerTiempoTransbordo();
 }
